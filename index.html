@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrive — Book Appointments. Grow Your Business.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --bg:          #F4F2EE;
+      --surface:     #FFFFFF;
+      --dark:        #0B1929;
+      --text:        #18181B;
+      --muted:       #72716E;
+      --amber:       #DC7A28;
+      --amber-light: #F0955A;
+      --violet:      #6835A8;
+      --teal:        #1A9DB8;
+      --green:       #22C55E;
+      --card-border: rgba(0,0,0,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Cursor ambient glow */
+    #cursor-glow {
+      position: fixed;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(220,122,40,0.07) 0%, rgba(104,53,168,0.04) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 9997;
+      will-change: transform;
+      transform: translate(-50%, -50%) translate(0px, 0px);
+      top: 0; left: 0;
+      transition: opacity 0.5s;
+    }
+
+    /* ─── Typography ─────────────────────── */
+    .font-display { font-family: 'Barlow', sans-serif; letter-spacing: -0.02em; }
+
+    /* ─── Gradient helpers ───────────────── */
+    .grad-text {
+      background: linear-gradient(125deg, var(--amber) 0%, var(--violet) 55%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─── Focus visible ──────────────────── */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* ─── Nav ────────────────────────────── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      transition: background 0.35s, box-shadow 0.35s, backdrop-filter 0.35s;
+    }
+    #nav.scrolled {
+      background: rgba(244,242,238,0.9);
+      backdrop-filter: blur(20px) saturate(200%);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.07), 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .nav-link {
+      position: relative;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -4px;
+      height: 1.5px;
+      background: linear-gradient(90deg, var(--amber), var(--violet));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-link:hover { color: var(--dark); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* ─── Background atmosphere ──────────── */
+    .hero-bg { background: #F0EDE8; }
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: rgba(242,240,236,0.60);
+      z-index: 1;
+    }
+    .clients-bg  { background: #F0EDE8; }
+    .booking-bg {
+      background:
+        linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)),
+        url('./Assets/backgrounds/glow-light.png') center / cover no-repeat;
+    }
+    .showcase-bg { background: #ECEAE6; }
+    .dark-bg     { background: #0B1929; }
+
+    /* ─── Phone mockup ───────────────────── */
+    .phone {
+      position: relative;
+      overflow: hidden;
+      border-radius: 11%;
+      box-shadow:
+        0 50px 90px rgba(11,25,41,0.22),
+        0 20px 40px rgba(11,25,41,0.14),
+        0 6px 12px rgba(11,25,41,0.08);
+    }
+    .phone-screen { width: 100%; height: 100%; }
+    .phone-screen img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* Phone glow variants */
+    .phone-glow-amber {
+      filter: drop-shadow(0 48px 64px rgba(220,122,40,0.28)) drop-shadow(0 16px 32px rgba(220,122,40,0.14));
+    }
+    .phone-glow-violet {
+      filter: drop-shadow(0 48px 64px rgba(104,53,168,0.24)) drop-shadow(0 16px 32px rgba(104,53,168,0.12));
+    }
+    .phone-glow-teal {
+      filter: drop-shadow(0 48px 64px rgba(26,157,184,0.2)) drop-shadow(0 16px 32px rgba(26,157,184,0.1));
+    }
+
+    /* ─── Floating cards ─────────────────── */
+    .float-card {
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 16px;
+      backdrop-filter: blur(16px);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,0,0,0.1),
+        0 24px 48px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    /* ─── Feature card ───────────────────── */
+    .feature-card {
+      position: relative;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(220,122,40,0.5) 0%, rgba(104,53,168,0.25) 45%, transparent 65%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 6px 12px rgba(0,0,0,0.07),
+        0 24px 48px rgba(0,0,0,0.11),
+        0 48px 80px rgba(220,122,40,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    /* Feature card top accent bar */
+    .feature-card-accent {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 22px 22px 0 0;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .feature-card:hover .feature-card-accent { opacity: 1; }
+
+    /* ─── Divider line ───────────────────── */
+    .divider {
+      width: 44px; height: 2px;
+      background: linear-gradient(90deg, var(--amber), var(--violet));
+      border-radius: 2px;
+    }
+
+    /* ─── Buttons ────────────────────────── */
+    .btn-dark {
+      background: var(--dark);
+      color: #fff;
+      border-radius: 100px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      box-shadow: 0 4px 20px rgba(11,25,41,0.28), 0 1px 0 rgba(255,255,255,0.08) inset;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
+    }
+    .btn-dark:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(11,25,41,0.38), 0 4px 12px rgba(220,122,40,0.12), 0 1px 0 rgba(255,255,255,0.08) inset;
+    }
+    .btn-dark:active { transform: translateY(0); }
+
+    .btn-outline {
+      position: relative;
+      border: 1.5px solid rgba(11,25,41,0.22);
+      border-radius: 100px;
+      color: var(--dark);
+      font-weight: 500;
+      transition: background 0.2s, border-color 0.2s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-outline:hover {
+      background: rgba(11,25,41,0.05);
+      border-color: rgba(11,25,41,0.38);
+      transform: translateY(-2px);
+    }
+    .btn-outline:active { transform: translateY(0); }
+
+    /* ─── Scroll reveal ──────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition:
+        opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+        transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+    .d5 { transition-delay: 0.5s; }
+
+    /* ─── Float animations ───────────────── */
+    @keyframes floatA {
+      0%,100% { transform: rotate(-4deg) translateY(0); }
+      50%      { transform: rotate(-4deg) translateY(-14px); }
+    }
+    @keyframes floatB {
+      0%,100% { transform: rotate(3.5deg) translateY(-6px); }
+      50%      { transform: rotate(3.5deg) translateY(8px); }
+    }
+    @keyframes floatC {
+      0%,100% { transform: rotate(2deg) translateY(0); }
+      50%      { transform: rotate(2deg) translateY(-10px); }
+    }
+    .fa { animation: floatA 6.5s ease-in-out infinite; }
+    .fb { animation: floatB 7.5s ease-in-out infinite; }
+    .fc { animation: floatC 8s ease-in-out infinite 0.8s; }
+
+    /* ─── Ticker ─────────────────────────── */
+    @keyframes tick {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: tick 22s linear infinite;
+    }
+    .ticker-mask {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    }
+
+    /* ─── Stat pill ──────────────────────── */
+    .stat-pill {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,1) inset;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
+    }
+    .stat-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1), 0 1px 0 rgba(255,255,255,1) inset;
+    }
+
+    /* ─── Pro feature row ────────────────── */
+    .pro-row {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 18px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .pro-row::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 18%; bottom: 18%;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background: linear-gradient(to bottom, var(--amber), var(--violet));
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pro-row:hover::before { transform: scaleY(1); }
+    .pro-row:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.32);
+    }
+
+    /* ─── Showcase phones container ──────── */
+    .showcase-stage {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 18px;
+      height: 600px;
+      overflow: visible;
+    }
+
+    /* ─── Section video backgrounds ────────── */
+    .section-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .light-video-overlay {
+      position: absolute; inset: 0;
+      z-index: 1;
+    }
+
+    /* ─── Scroll cue animation ───────────── */
+    @keyframes scrollDown {
+      0%   { transform: translateY(0);   opacity: 0.4; }
+      50%  { transform: translateY(6px); opacity: 0.75; }
+      100% { transform: translateY(0);   opacity: 0.4; }
+    }
+    .scroll-cue { animation: scrollDown 2s ease-in-out infinite; }
+
+    /* ─── Green dot pulse ────────────────── */
+    @keyframes dotPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+      50%       { box-shadow: 0 0 0 4px rgba(34,197,94,0); }
+    }
+    .dot-pulse { animation: dotPulse 2s ease-in-out infinite; }
+
+    /* ─── CTA dot grid ───────────────────── */
+    .dot-grid-overlay {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    /* ─── Eyebrow label ──────────────────── */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1.5px;
+      border-radius: 2px;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ─── Section mesh glow ──────────────── */
+    .mesh-amber {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+
+    /* ─── Dark card (pros section badge) ─── */
+    .dark-glass-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+    }
+    .dark-glass-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* ─── Showcase center phone extra glow ── */
+    .center-phone-glow {
+      filter:
+        drop-shadow(0 80px 100px rgba(11,25,41,0.38))
+        drop-shadow(0 32px 56px rgba(220,122,40,0.18))
+        drop-shadow(0 0 80px rgba(104,53,168,0.12));
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor ambient glow -->
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════════════ -->
+  <nav id="nav" class="py-5 px-6 md:px-12 lg:px-20">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <img src="./Assets/site screens/logo.jpg" alt="Arrive" style="width:44px;height:44px;object-fit:cover;border-radius:11px;box-shadow:0 4px 12px rgba(0,0,0,0.15),0 1px 0 rgba(255,255,255,0.4) inset;">
+        <span class="font-display text-[1.2rem] font-semibold tracking-tight" style="color:var(--dark)">Arrive</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#clients" class="nav-link">For Clients</a>
+        <a href="#pros" class="nav-link">For Pros</a>
+        <a href="#features" class="nav-link">Features</a>
+      </div>
+
+      <a href="#download" class="btn-dark text-sm px-5 py-2.5">Download Free</a>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ════════════════════════════════════════ -->
+  <section class="hero-bg relative overflow-hidden min-h-screen flex items-center pt-24 pb-20">
+    <video class="hero-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-mid.png">
+      <source src="./Assets/backgrounds/mid-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+
+    <!-- Ghost wordmark -->
+    <div class="pointer-events-none select-none absolute inset-0 flex items-center justify-center overflow-hidden" aria-hidden="true" style="z-index:2">
+      <span class="font-display font-bold text-[22vw] tracking-tighter" style="color:var(--dark);opacity:0.032;">ARRIVE</span>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 w-full relative" style="z-index:2">
+      <div class="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
+
+        <!-- Left: copy -->
+        <div>
+          <!-- Badge -->
+          <div class="reveal mb-8 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full stat-pill">
+            <span class="w-2 h-2 rounded-full dot-pulse" style="background:var(--green);flex-shrink:0"></span>
+            <span class="text-sm font-medium" style="color:var(--dark)">Free to sign up &mdash; no subscription</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="reveal d1 font-display font-bold tracking-tight leading-[1.0] mb-7" style="font-size:clamp(3.5rem,8vw,5.5rem);color:var(--dark)">
+            Book it.<br>
+            <em class="not-italic grad-text">Arrive</em><br>
+            ready.
+          </h1>
+
+          <!-- Sub -->
+          <p class="reveal d2 text-lg leading-[1.75] max-w-[400px] mb-10" style="color:var(--muted)">
+            Discover top-rated barbers, stylists, and beauty pros near you. Book appointments and pay seamlessly — all in one beautifully simple app.
+          </p>
+
+          <!-- Download CTAs -->
+          <div class="reveal d3 flex flex-wrap items-center gap-3 mb-12">
+            <a href="#" class="btn-dark inline-flex items-center gap-2.5 px-6 py-3.5 text-sm">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              App Store
+            </a>
+            <a href="#" class="btn-outline inline-flex items-center gap-2.5 px-6 py-3.5 text-sm">
+              <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.33.19.7.25 1.08.19L15 12 4.26.05c-.38-.06-.75 0-1.08.19C2.5.62 2.06 1.4 2.06 2.23v19.54c0 .83.44 1.61 1.12 1.99zM16.54 13.42l2.68 2.66-9.81 5.56 7.13-8.22zM20.94 10.2c.45.26.73.73.73 1.26s-.28 1-.73 1.26l-2.22 1.26-2.97-2.96 2.97-2.96 2.22 1.14zM9.41 12L6.27 8.86 16.22 3.36 9.41 12z"/></svg>
+              Google Play
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="reveal d4 flex flex-wrap items-center gap-3">
+            <div class="stat-pill px-4 py-2.5 flex items-center gap-2.5">
+              <span class="w-1.5 h-5 rounded-full flex-shrink-0" style="background:linear-gradient(to bottom,var(--amber),var(--amber-light))"></span>
+              <div>
+                <span class="font-display text-lg font-bold block leading-none" style="color:var(--dark);font-variant-numeric:tabular-nums">50k+</span>
+                <span class="text-[10px] font-medium" style="color:var(--muted)">Bookings</span>
+              </div>
+            </div>
+            <div class="stat-pill px-4 py-2.5 flex items-center gap-2.5">
+              <span class="w-1.5 h-5 rounded-full flex-shrink-0" style="background:linear-gradient(to bottom,var(--violet),#9B6DD8)"></span>
+              <div>
+                <span class="font-display text-lg font-bold block leading-none" style="color:var(--dark);font-variant-numeric:tabular-nums">4.9</span>
+                <span class="text-[10px] font-medium" style="color:var(--muted)">★ Rating</span>
+              </div>
+            </div>
+            <div class="stat-pill px-4 py-2.5 flex items-center gap-2.5">
+              <span class="w-1.5 h-5 rounded-full flex-shrink-0" style="background:linear-gradient(to bottom,var(--teal),#4DC4D8)"></span>
+              <div>
+                <span class="font-display text-lg font-bold block leading-none" style="color:var(--dark);font-variant-numeric:tabular-nums">10k+</span>
+                <span class="text-[10px] font-medium" style="color:var(--muted)">Professionals</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: phones -->
+        <div class="relative flex justify-center items-center" style="height:680px">
+          <!-- Glow orbs -->
+          <div class="absolute pointer-events-none" style="width:380px;height:380px;top:50%;left:48%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(104,53,168,0.16) 0%,transparent 70%);filter:blur(60px)"></div>
+          <div class="absolute pointer-events-none" style="width:240px;height:240px;top:28%;left:28%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(220,122,40,0.18) 0%,transparent 70%);filter:blur(44px)"></div>
+
+          <!-- Back phone -->
+          <div class="absolute right-0 top-12 z-10 fa phone-glow-violet" style="transform-origin:center center;">
+            <div class="phone" style="width:220px;height:458px;">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/home.png" alt="Arrive home screen">
+              </div>
+            </div>
+          </div>
+
+          <!-- Front phone -->
+          <div class="absolute left-4 z-20 fb phone-glow-amber" style="top:10%;">
+            <div class="phone" style="width:262px;height:545px;">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/splash.png" alt="Arrive splash screen">
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating booking confirmed badge -->
+          <div class="absolute bottom-20 right-4 z-30 float-card px-4 py-3.5 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.08))">
+              <svg class="w-4 h-4" style="color:var(--green)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-semibold" style="color:var(--dark)">Booking confirmed</p>
+              <p style="font-size:10px;color:var(--muted);margin-top:1px">Marcus · Fri Jun 5, 10AM</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style="z-index:2">
+      <span class="text-[10px] tracking-[0.2em] uppercase font-medium" style="color:var(--muted)">Scroll</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color:var(--muted);opacity:0.6">
+        <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       CATEGORY TICKER
+  ════════════════════════════════════════ -->
+  <div class="ticker-mask overflow-hidden py-4" style="border-top:1px solid rgba(0,0,0,0.07);border-bottom:1px solid rgba(0,0,0,0.07);background:rgba(255,255,255,0.55)">
+    <div class="ticker-track">
+      <div class="flex items-center gap-7 px-7 shrink-0" style="white-space:nowrap">
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Barbers</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Hair Stylists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>Nail Technicians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Tattoo Artists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Makeup Artists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>Estheticians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Eyebrow Technicians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Massage Therapists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+      </div>
+      <div class="flex items-center gap-7 px-7 shrink-0" aria-hidden="true" style="white-space:nowrap">
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Barbers</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Hair Stylists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>Nail Technicians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Tattoo Artists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Makeup Artists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>Estheticians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>Eyebrow Technicians</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+        <span class="inline-flex items-center gap-2 text-sm font-medium" style="color:#A09D98"><span style="width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;flex-shrink:0"></span>Massage Therapists</span>
+        <span style="color:#D5D2CE;font-size:18px">·</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       FOR CLIENTS
+  ════════════════════════════════════════ -->
+  <section id="clients" class="py-28 md:py-40 relative overflow-hidden" style="background:#F0EDE8">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-20 xl:gap-28 items-center">
+
+        <!-- Copy -->
+        <div>
+          <div class="reveal divider mb-6"></div>
+          <p class="reveal eyebrow mb-5" style="color:var(--amber)">For Clients</p>
+          <h2 class="reveal d1 font-display font-bold tracking-tight leading-[1.05] mb-6" style="font-size:clamp(2.8rem,5.5vw,4rem);color:var(--dark)">
+            Find your<br>perfect pro.
+          </h2>
+          <p class="reveal d2 text-base leading-[1.8] max-w-sm mb-10" style="color:var(--muted)">
+            Browse hundreds of verified professionals by category, location, and rating. Discover your next favorite barber, stylist, or beauty expert in seconds.
+          </p>
+
+          <div class="reveal d3 space-y-5">
+            <div class="flex items-start gap-4 group">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" style="background:linear-gradient(135deg,rgba(220,122,40,0.15),rgba(220,122,40,0.07))">
+                <svg class="w-4 h-4" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:var(--dark)">Search by category or location</p>
+                <p class="text-sm mt-0.5" style="color:var(--muted)">Filter by service, distance, price, and availability.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 group">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" style="background:linear-gradient(135deg,rgba(220,122,40,0.15),rgba(220,122,40,0.07))">
+                <svg class="w-4 h-4" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:var(--dark)">Save your favorites</p>
+                <p class="text-sm mt-0.5" style="color:var(--muted)">Bookmark the pros you love for quick rebooking.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4 group">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-110" style="background:linear-gradient(135deg,rgba(220,122,40,0.15),rgba(220,122,40,0.07))">
+                <svg class="w-4 h-4" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:var(--dark)">Chat directly with your pro</p>
+                <p class="text-sm mt-0.5" style="color:var(--muted)">Message before your appointment to share preferences.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="reveal relative phone-glow-amber">
+            <div class="phone fa" style="width:276px;height:572px;transform:rotate(3.5deg)">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/home.png" alt="Browse professionals">
+              </div>
+            </div>
+            <!-- Floating nearby pill -->
+            <div class="absolute -left-16 bottom-24 float-card px-4 py-3.5 flex items-center gap-3" style="width:172px">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.07))">
+                <svg class="w-4 h-4" style="color:var(--green)" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-semibold" style="color:var(--dark)">500+ pros nearby</p>
+                <p style="font-size:10px;color:var(--muted);margin-top:1px">In your city</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       BOOKING
+  ════════════════════════════════════════ -->
+  <section class="booking-bg py-28 md:py-40 relative overflow-hidden">
+    <!-- Mesh accent -->
+    <div class="mesh-amber absolute" style="width:460px;height:460px;bottom:-80px;left:-120px;background:radial-gradient(circle,rgba(104,53,168,0.1) 0%,transparent 70%);z-index:0"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-20 xl:gap-28 items-center">
+
+        <!-- Phone (left) -->
+        <div class="flex justify-center lg:justify-start order-2 lg:order-1">
+          <div class="reveal relative phone-glow-teal">
+            <div class="phone fb" style="width:276px;height:572px;transform:rotate(-3.5deg)">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/booking.png" alt="Book an appointment">
+              </div>
+            </div>
+            <!-- Confirmation badge -->
+            <div class="absolute -right-14 top-14 float-card px-4 py-3.5" style="width:172px">
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <span class="w-2 h-2 rounded-full dot-pulse" style="background:var(--green);flex-shrink:0"></span>
+                <p class="font-semibold uppercase tracking-wide" style="font-size:9px;color:var(--green)">Confirmed</p>
+              </div>
+              <p class="text-xs font-semibold" style="color:var(--dark)">Haircut · Jun 5</p>
+              <p style="font-size:10px;color:var(--muted);margin-top:1px">Elite Cuts Barbershop</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copy (right) -->
+        <div class="order-1 lg:order-2">
+          <div class="reveal divider mb-6"></div>
+          <p class="reveal eyebrow mb-5" style="color:var(--violet)">Seamless Booking</p>
+          <h2 class="reveal d1 font-display font-bold tracking-tight leading-[1.05] mb-6" style="font-size:clamp(2.8rem,5.5vw,4rem);color:var(--dark)">
+            Book it.<br>
+            Pay it.<br>
+            <em class="not-italic" style="color:var(--teal)">Done.</em>
+          </h2>
+          <p class="reveal d2 text-base leading-[1.8] max-w-sm mb-10" style="color:var(--muted)">
+            Pick a date, choose a time, and pay securely — all without picking up the phone. Transparent pricing, no surprises.
+          </p>
+
+          <div class="reveal d3 grid grid-cols-2 gap-3">
+            <div class="feature-card p-5">
+              <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--violet),var(--teal))"></div>
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style="background:linear-gradient(135deg,rgba(104,53,168,0.12),rgba(104,53,168,0.06))">
+                <svg class="w-4 h-4" style="color:var(--violet)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              </div>
+              <p class="font-semibold text-sm" style="color:var(--dark)">Pick your slot</p>
+              <p class="text-xs mt-1" style="color:var(--muted)">Real-time availability</p>
+            </div>
+            <div class="feature-card p-5">
+              <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--violet),var(--teal))"></div>
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style="background:linear-gradient(135deg,rgba(104,53,168,0.12),rgba(104,53,168,0.06))">
+                <svg class="w-4 h-4" style="color:var(--violet)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
+              <p class="font-semibold text-sm" style="color:var(--dark)">Secure payment</p>
+              <p class="text-xs mt-1" style="color:var(--muted)">Encrypted & protected</p>
+            </div>
+            <div class="feature-card p-5">
+              <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--teal),var(--violet))"></div>
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style="background:linear-gradient(135deg,rgba(104,53,168,0.12),rgba(104,53,168,0.06))">
+                <svg class="w-4 h-4" style="color:var(--violet)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              </div>
+              <p class="font-semibold text-sm" style="color:var(--dark)">Reminders</p>
+              <p class="text-xs mt-1" style="color:var(--muted)">Never miss an appt.</p>
+            </div>
+            <div class="feature-card p-5">
+              <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--teal),var(--violet))"></div>
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style="background:linear-gradient(135deg,rgba(104,53,168,0.12),rgba(104,53,168,0.06))">
+                <svg class="w-4 h-4" style="color:var(--violet)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              </div>
+              <p class="font-semibold text-sm" style="color:var(--dark)">Booking history</p>
+              <p class="text-xs mt-1" style="color:var(--muted)">Rebook past services</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       FEATURE TRIO
+  ════════════════════════════════════════ -->
+  <section id="features" class="py-24 md:py-32 relative overflow-hidden" style="background:#F4F2EE">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="text-center mb-16">
+        <div class="reveal divider mx-auto mb-7"></div>
+        <h2 class="reveal font-display font-bold tracking-tight leading-tight mb-4" style="font-size:clamp(2.6rem,5vw,3.8rem);color:var(--dark)">Everything you need.</h2>
+        <p class="reveal d1 text-base max-w-sm mx-auto leading-relaxed" style="color:var(--muted)">
+          Arrive connects clients and professionals on one beautifully designed platform.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- 01 Discover -->
+        <div class="reveal feature-card p-9" style="min-height:320px;display:flex;flex-direction:column">
+          <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--amber),var(--amber-light))"></div>
+          <div class="mb-8">
+            <span class="font-display font-bold tracking-[0.06em] uppercase block mb-3" style="font-size:13px;color:#C5C2BC">01</span>
+            <div style="width:32px;height:1px;background:rgba(0,0,0,0.08)"></div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-auto" style="background:linear-gradient(135deg,rgba(220,122,40,0.14),rgba(220,122,40,0.06))">
+            <svg class="w-6 h-6" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+          <div class="mt-8">
+            <h3 class="font-display text-2xl font-bold mb-2" style="color:var(--dark)">Discover</h3>
+            <p class="text-sm leading-relaxed" style="color:var(--muted)">Browse verified beauty professionals by category, rating, and location. Read reviews and find your perfect match.</p>
+          </div>
+        </div>
+
+        <!-- 02 Book & Pay -->
+        <div class="reveal d1 feature-card p-9" style="min-height:320px;display:flex;flex-direction:column">
+          <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--violet),var(--teal))"></div>
+          <div class="mb-8">
+            <span class="font-display font-bold tracking-[0.06em] uppercase block mb-3" style="font-size:13px;color:#C5C2BC">02</span>
+            <div style="width:32px;height:1px;background:rgba(0,0,0,0.08)"></div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-auto" style="background:linear-gradient(135deg,rgba(104,53,168,0.14),rgba(104,53,168,0.06))">
+            <svg class="w-6 h-6" style="color:var(--violet)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="mt-8">
+            <h3 class="font-display text-2xl font-bold mb-2" style="color:var(--dark)">Book &amp; Pay</h3>
+            <p class="text-sm leading-relaxed" style="color:var(--muted)">Select your time, confirm your appointment, and pay securely in seconds. Real-time slots, zero hassle.</p>
+          </div>
+        </div>
+
+        <!-- 03 Grow -->
+        <div class="reveal d2 feature-card p-9" style="min-height:320px;display:flex;flex-direction:column">
+          <div class="feature-card-accent" style="background:linear-gradient(90deg,var(--teal),var(--violet))"></div>
+          <div class="mb-8">
+            <span class="font-display font-bold tracking-[0.06em] uppercase block mb-3" style="font-size:13px;color:#C5C2BC">03</span>
+            <div style="width:32px;height:1px;background:rgba(0,0,0,0.08)"></div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-auto" style="background:linear-gradient(135deg,rgba(26,157,184,0.14),rgba(26,157,184,0.06))">
+            <svg class="w-6 h-6" style="color:var(--teal)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <div class="mt-8">
+            <h3 class="font-display text-2xl font-bold mb-2" style="color:var(--dark)">Grow</h3>
+            <p class="text-sm leading-relaxed" style="color:var(--muted)">Professionals boost visibility, run promotions, and build loyal client bases with built-in marketing tools.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       FOR PROS (dark)
+  ════════════════════════════════════════ -->
+  <section id="pros" class="dark-bg py-28 md:py-40 relative overflow-hidden text-white">
+    <video class="section-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-dark.png">
+      <source src="./Assets/backgrounds/dark-video.mp4" type="video/mp4">
+    </video>
+    <div class="light-video-overlay" style="background:rgba(11,25,41,0.78)"></div>
+    <!-- Ghost text -->
+    <div class="pointer-events-none select-none absolute inset-0 flex items-center justify-center overflow-hidden" aria-hidden="true" style="z-index:2">
+      <span class="font-display font-bold tracking-tighter" style="font-size:20vw;color:white;opacity:0.028">PROS</span>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="text-center mb-20">
+        <p class="reveal eyebrow mb-5" style="color:var(--amber)">For Professionals</p>
+        <h2 class="reveal d1 font-display font-bold tracking-tight leading-[1.05] max-w-3xl mx-auto" style="font-size:clamp(2.8rem,5.5vw,4.5rem)">
+          Built for pros who<br>
+          <em class="not-italic grad-text">mean business.</em>
+        </h2>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-20 xl:gap-28 items-center">
+        <!-- Feature list -->
+        <div class="reveal space-y-3">
+          <div class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)">
+              <svg class="w-5 h-5" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-white mb-0.5">Boost Your Reach</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Get discovered by new clients looking for your exact services.</p>
+            </div>
+          </div>
+
+          <div class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(104,53,168,0.22)">
+              <svg class="w-5 h-5" style="color:#A77DE0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-white mb-0.5">Social Media Marketing</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Create and share custom posts and graphics with one tap.</p>
+            </div>
+          </div>
+
+          <div class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(26,157,184,0.16)">
+              <svg class="w-5 h-5" style="color:var(--teal)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-white mb-0.5">Text &amp; Email Campaigns</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Automate campaigns or send targeted one-time messages.</p>
+            </div>
+          </div>
+
+          <div class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.14)">
+              <svg class="w-5 h-5" style="color:var(--green)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-white mb-0.5">Import &amp; Invite Clients</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Bring your existing client list onto Arrive with a single tap.</p>
+            </div>
+          </div>
+
+          <div class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)">
+              <svg class="w-5 h-5" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-sm text-white mb-0.5">Loyalty &amp; Referrals</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Reward your best clients and grow through word of mouth.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="reveal flex justify-center lg:justify-end">
+          <div class="relative phone-glow-amber">
+            <div class="phone fc" style="width:276px;height:572px;transform:rotate(2deg)">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/marketing.png" alt="Marketing dashboard">
+              </div>
+            </div>
+            <!-- Clients invited badge -->
+            <div class="absolute -left-14 bottom-20 dark-glass-card px-5 py-4 flex items-center gap-4">
+              <div>
+                <p class="font-display text-2xl font-bold leading-none mb-1" style="color:var(--amber);font-variant-numeric:tabular-nums">1,737</p>
+                <p class="uppercase tracking-widest" style="font-size:9px;color:rgba(255,255,255,0.45)">Clients Invited</p>
+              </div>
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.2)">
+                <svg class="w-4 h-4" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       SCREEN SHOWCASE
+  ════════════════════════════════════════ -->
+  <section class="showcase-bg py-28 md:py-40 overflow-hidden relative" style="border-top:1px solid rgba(0,0,0,0.06)">
+    <video class="section-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-mid.png">
+      <source src="./Assets/backgrounds/mid-video.mp4" type="video/mp4">
+    </video>
+    <div class="light-video-overlay" style="background:rgba(240,238,234,0.82)"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="text-center mb-16">
+        <div class="reveal divider mx-auto mb-7"></div>
+        <h2 class="reveal font-display font-bold tracking-tight leading-tight mb-4" style="font-size:clamp(2.6rem,5vw,3.8rem);color:var(--dark)">Every screen, crafted.</h2>
+        <p class="reveal d1 text-base max-w-sm mx-auto leading-relaxed" style="color:var(--muted)">
+          A beautifully designed app that makes booking feel effortless for everyone.
+        </p>
+      </div>
+
+      <!-- Phones fan -->
+      <div class="showcase-stage">
+        <div class="reveal d3 flex-shrink-0" style="transform:rotate(-7deg) translateY(50px)">
+          <div class="phone" style="width:192px;height:400px">
+            <div class="phone-screen"><img src="./Assets/site screens/appointments.png" alt="Appointments"></div>
+          </div>
+        </div>
+        <div class="reveal d2 flex-shrink-0" style="transform:rotate(-3.5deg) translateY(20px)">
+          <div class="phone" style="width:224px;height:468px">
+            <div class="phone-screen"><img src="./Assets/site screens/home.png" alt="Home"></div>
+          </div>
+        </div>
+        <div class="reveal d1 flex-shrink-0 z-10 center-phone-glow" style="transform:rotate(0deg) translateY(-16px)">
+          <div class="phone" style="width:256px;height:532px">
+            <div class="phone-screen"><img src="./Assets/site screens/pro page.png" alt="Pro profile"></div>
+          </div>
+        </div>
+        <div class="reveal d2 flex-shrink-0" style="transform:rotate(3.5deg) translateY(20px)">
+          <div class="phone" style="width:224px;height:468px">
+            <div class="phone-screen"><img src="./Assets/site screens/marketing.png" alt="Marketing"></div>
+          </div>
+        </div>
+        <div class="reveal d3 flex-shrink-0" style="transform:rotate(7deg) translateY(50px)">
+          <div class="phone" style="width:192px;height:400px">
+            <div class="phone-screen"><img src="./Assets/site screens/client history.png" alt="Client history"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       CTA (dark)
+  ════════════════════════════════════════ -->
+  <section id="download" class="dark-bg py-28 md:py-36 relative overflow-hidden text-white text-center">
+    <video class="section-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-dark.png">
+      <source src="./Assets/backgrounds/dark-video.mp4" type="video/mp4">
+    </video>
+    <div class="light-video-overlay" style="background:rgba(11,25,41,0.82)"></div>
+    <!-- Dot grid -->
+    <div class="dot-grid-overlay" style="z-index:2"></div>
+    <!-- Decorative glows -->
+    <div class="absolute pointer-events-none" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(220,122,40,0.12) 0%,transparent 65%);filter:blur(60px);z-index:2"></div>
+    <div class="absolute pointer-events-none" style="width:300px;height:300px;top:20%;left:10%;background:radial-gradient(circle,rgba(104,53,168,0.1) 0%,transparent 70%);filter:blur(50px);z-index:2"></div>
+    <div class="absolute pointer-events-none" style="width:280px;height:280px;bottom:15%;right:8%;background:radial-gradient(circle,rgba(26,157,184,0.08) 0%,transparent 70%);filter:blur(50px);z-index:2"></div>
+    <!-- Decorative ring -->
+    <div class="absolute pointer-events-none" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,0.04);border-radius:50%;z-index:2"></div>
+    <div class="absolute pointer-events-none" style="width:820px;height:820px;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,0.025);border-radius:50%;z-index:2"></div>
+
+    <div class="max-w-3xl mx-auto px-6 relative z-10">
+      <div class="reveal divider mx-auto mb-10" style="background:linear-gradient(90deg,var(--amber),var(--violet))"></div>
+      <h2 class="reveal d1 font-display font-bold tracking-tight leading-[1.0] mb-6" style="font-size:clamp(3.5rem,8vw,6rem)">
+        Ready to<br>
+        <em class="not-italic grad-text">arrive?</em>
+      </h2>
+      <p class="reveal d2 text-lg leading-relaxed max-w-sm mx-auto mb-10" style="color:rgba(255,255,255,0.55)">
+        Free to sign up. No subscription required. Start booking or growing your business today.
+      </p>
+      <div class="reveal d3 flex items-center justify-center flex-wrap gap-4">
+        <a href="#" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-white text-sm font-semibold" style="color:var(--dark);box-shadow:0 4px 20px rgba(255,255,255,0.14),0 8px 40px rgba(220,122,40,0.2);transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(255,255,255,0.18),0 16px 48px rgba(220,122,40,0.28)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(255,255,255,0.14),0 8px 40px rgba(220,122,40,0.2)'">
+          <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </a>
+        <a href="#" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full text-sm font-semibold text-white" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);transition:transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.2s, border-color 0.2s" onmouseover="this.style.transform='translateY(-2px)';this.style.background='rgba(255,255,255,0.15)';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.transform='';this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='rgba(255,255,255,0.15)'">
+          <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.33.19.7.25 1.08.19L15 12 4.26.05c-.38-.06-.75 0-1.08.19C2.5.62 2.06 1.4 2.06 2.23v19.54c0 .83.44 1.61 1.12 1.99zM16.54 13.42l2.68 2.66-9.81 5.56 7.13-8.22zM20.94 10.2c.45.26.73.73.73 1.26s-.28 1-.73 1.26l-2.22 1.26-2.97-2.96 2.97-2.96 2.22 1.14zM9.41 12L6.27 8.86 16.22 3.36 9.41 12z"/></svg>
+          Google Play
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer class="py-10 relative" style="background:#EAE8E2">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--amber) 20%,var(--violet) 50%,var(--teal) 80%,transparent 100%);opacity:0.5"></div>
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5">
+          <img src="./Assets/site screens/logo.jpg" alt="Arrive" style="width:32px;height:32px;object-fit:cover;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)">
+          <span class="font-display text-lg font-semibold tracking-tight" style="color:var(--dark)">Arrive</span>
+        </div>
+        <div class="flex items-center gap-7 text-sm" style="color:var(--muted)">
+          <a href="./privacy.html" class="nav-link" style="font-size:0.875rem">Privacy</a>
+          <a href="./terms.html" class="nav-link" style="font-size:0.875rem">Terms</a>
+          <a href="./support.html" class="nav-link" style="font-size:0.875rem">Support</a>
+          <a href="./contact.html" class="nav-link" style="font-size:0.875rem">Contact</a>
+        </div>
+        <p class="text-xs" style="color:#B0ADA7">© 2026 Arrive. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+
+    // Scroll reveal
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+      });
+    });
+
+    // Cursor ambient glow
+    const glow = document.getElementById('cursor-glow');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my;
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    function animateGlow() {
+      cx += (mx - cx) * 0.06;
+      cy += (my - cy) * 0.06;
+      glow.style.transform = `translate(calc(-50% + ${cx}px), calc(-50% + ${cy}px))`;
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+  </script>
+</body>
+</html>

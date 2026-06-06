@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Arrive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,700;0,800;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #F4F2EE; --dark: #0B1929; --muted: #72716E;
+      --amber: #DC7A28; --violet: #6835A8; --teal: #1A9DB8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); overflow-x: hidden; }
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+    .font-display { font-family: 'Barlow', sans-serif; letter-spacing: -0.02em; }
+    #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: rgba(244,242,238,0.9); backdrop-filter: blur(20px) saturate(200%); box-shadow: 0 1px 0 rgba(0,0,0,0.07); }
+    .nav-link { position: relative; color: var(--muted); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; text-decoration: none; }
+    .nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 1.5px; background: linear-gradient(90deg, var(--amber), var(--violet)); border-radius: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+    .nav-link:hover { color: var(--dark); }
+    .nav-link:hover::after { transform: scaleX(1); }
+    .btn-dark { background: var(--dark); color: #fff; border-radius: 100px; font-weight: 500; box-shadow: 0 4px 20px rgba(11,25,41,0.28); transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s; text-decoration: none; display: inline-block; }
+    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(11,25,41,0.38); }
+    .page-hero {
+      background: linear-gradient(rgba(11,25,41,0.84), rgba(11,25,41,0.84)), url('./Assets/backgrounds/glow-dark.png') center/cover no-repeat;
+      padding: 160px 0 80px; position: relative; overflow: hidden;
+    }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 40% 50%, rgba(104,53,168,0.14) 0%, transparent 65%); }
+    .toc-link { display: block; padding: 8px 0; font-size: 0.875rem; color: var(--muted); text-decoration: none; border-left: 2px solid transparent; padding-left: 14px; transition: color 0.2s, border-color 0.2s; }
+    .toc-link:hover { color: var(--violet); border-left-color: var(--violet); }
+    .prose h2 { font-family: 'Barlow', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--dark); margin: 2.5rem 0 0.75rem; letter-spacing: -0.02em; }
+    .prose h3 { font-size: 1rem; font-weight: 600; color: var(--dark); margin: 1.5rem 0 0.5rem; }
+    .prose p { font-size: 0.9375rem; line-height: 1.8; color: var(--muted); margin-bottom: 1rem; }
+    .prose ul { list-style: none; padding: 0; margin-bottom: 1rem; }
+    .prose ul li { font-size: 0.9375rem; line-height: 1.8; color: var(--muted); padding-left: 1.25rem; position: relative; margin-bottom: 0.4rem; }
+    .prose ul li::before { content: '·'; position: absolute; left: 0; color: var(--violet); font-weight: 700; }
+    a:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <nav id="nav" class="py-4 px-6 md:px-12 lg:px-20">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="./index.html" class="flex items-center gap-2.5" style="text-decoration:none">
+        <img src="./Assets/site screens/logo.jpg" alt="Arrive" style="width:40px;height:40px;object-fit:cover;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15)">
+        <span class="font-display text-[1.1rem] font-semibold tracking-tight" style="color:var(--dark)">Arrive</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="./index.html#clients" class="nav-link">For Clients</a>
+        <a href="./index.html#pros" class="nav-link">For Pros</a>
+        <a href="./index.html#features" class="nav-link">Features</a>
+      </div>
+      <a href="./index.html#download" class="btn-dark text-sm px-5 py-2.5">Download Free</a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <p class="text-xs font-semibold tracking-[0.18em] uppercase mb-4" style="color:#A77DE0">Legal</p>
+      <h1 class="font-display font-bold leading-none mb-4" style="font-size:clamp(3rem,7vw,5rem);color:#fff">Terms of Service</h1>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.9375rem">Last updated June 6, 2026</p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-20">
+    <div class="grid lg:grid-cols-[240px_1fr] gap-16">
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-28">
+          <p class="text-xs font-semibold tracking-[0.14em] uppercase mb-4" style="color:#A77DE0">On this page</p>
+          <nav>
+            <a href="#acceptance" class="toc-link">Acceptance</a>
+            <a href="#eligibility" class="toc-link">Eligibility</a>
+            <a href="#accounts" class="toc-link">Accounts</a>
+            <a href="#services" class="toc-link">Platform Services</a>
+            <a href="#payments" class="toc-link">Payments & Fees</a>
+            <a href="#conduct" class="toc-link">User Conduct</a>
+            <a href="#pros-terms" class="toc-link">Professional Terms</a>
+            <a href="#intellectual" class="toc-link">Intellectual Property</a>
+            <a href="#disclaimers" class="toc-link">Disclaimers</a>
+            <a href="#termination" class="toc-link">Termination</a>
+            <a href="#contact-us" class="toc-link">Contact</a>
+          </nav>
+        </div>
+      </aside>
+
+      <article class="prose max-w-none">
+
+        <div id="acceptance">
+          <h2>Acceptance of Terms</h2>
+          <p>By creating an account or using the Arrive platform, you agree to be bound by these Terms of Service ("Terms") and our Privacy Policy. If you do not agree to these Terms, do not use the Platform. We may update these Terms from time to time and will notify you of material changes via email or in-app notification.</p>
+        </div>
+
+        <div id="eligibility">
+          <h2>Eligibility</h2>
+          <p>You must be at least 13 years of age to use Arrive. By agreeing to these Terms, you represent and warrant that you are of legal age in your jurisdiction to form a binding contract. Professionals offering services through Arrive must be at least 18 years of age and legally permitted to provide the services they list.</p>
+        </div>
+
+        <div id="accounts">
+          <h2>Accounts</h2>
+          <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account. Arrive reserves the right to suspend or terminate accounts at its discretion.</p>
+          <ul>
+            <li>You may not create multiple accounts to circumvent restrictions or bans</li>
+            <li>You may not share, sell, or transfer your account to another person</li>
+            <li>You are responsible for ensuring your account information is accurate and current</li>
+          </ul>
+        </div>
+
+        <div id="services">
+          <h2>Platform Services</h2>
+          <p>Arrive is a marketplace that connects clients seeking beauty and grooming services with independent professionals. Arrive is not the employer of any professional on the platform and does not guarantee the quality, safety, or legality of services rendered.</p>
+          <p>Arrive acts as a limited agent of professionals for the purpose of collecting payments on their behalf. All service agreements are solely between the client and the professional.</p>
+        </div>
+
+        <div id="payments">
+          <h2>Payments &amp; Fees</h2>
+          <h3>For Clients</h3>
+          <ul>
+            <li>Payments are processed securely at the time of booking or service completion</li>
+            <li>Cancellation policies are set by each professional and displayed before booking</li>
+            <li>Refunds are subject to the professional's cancellation policy</li>
+            <li>Arrive may charge a small service fee which will be disclosed at checkout</li>
+          </ul>
+          <h3>For Professionals</h3>
+          <ul>
+            <li>Arrive deducts a platform commission from each completed booking</li>
+            <li>Current commission rates are displayed in the Pro dashboard</li>
+            <li>Payouts are processed on a rolling weekly basis to your linked bank account</li>
+            <li>You are responsible for reporting income and remitting applicable taxes</li>
+          </ul>
+        </div>
+
+        <div id="conduct">
+          <h2>User Conduct</h2>
+          <p>You agree not to:</p>
+          <ul>
+            <li>Harass, threaten, or abuse other users or professionals</li>
+            <li>Post false, misleading, or fraudulent reviews</li>
+            <li>Use the Platform for any unlawful purpose</li>
+            <li>Attempt to circumvent the platform to arrange payments outside of Arrive</li>
+            <li>Scrape, copy, or republish any content from the Platform without permission</li>
+            <li>Interfere with the Platform's technical systems or security</li>
+          </ul>
+        </div>
+
+        <div id="pros-terms">
+          <h2>Professional Terms</h2>
+          <p>Professionals who list services on Arrive agree to:</p>
+          <ul>
+            <li>Maintain accurate profiles including services offered, pricing, and availability</li>
+            <li>Hold any required licenses or certifications for the services they provide</li>
+            <li>Honor confirmed bookings or cancel with adequate notice per their stated policy</li>
+            <li>Treat all clients with professionalism and respect</li>
+            <li>Comply with applicable health, safety, and sanitation standards</li>
+          </ul>
+        </div>
+
+        <div id="intellectual">
+          <h2>Intellectual Property</h2>
+          <p>All content on the Arrive Platform — including logos, design, text, graphics, and software — is owned by Arrive or its licensors and protected by intellectual property laws. You may not reproduce, distribute, or create derivative works without express written permission.</p>
+          <p>By submitting reviews, photos, or other content to the Platform, you grant Arrive a non-exclusive, royalty-free license to use, display, and distribute such content in connection with our services.</p>
+        </div>
+
+        <div id="disclaimers">
+          <h2>Disclaimers &amp; Limitation of Liability</h2>
+          <p>THE PLATFORM IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. ARRIVE DOES NOT WARRANT THAT THE PLATFORM WILL BE UNINTERRUPTED, ERROR-FREE, OR FREE OF VIRUSES.</p>
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, ARRIVE'S TOTAL LIABILITY FOR ANY CLAIMS ARISING FROM THESE TERMS OR YOUR USE OF THE PLATFORM SHALL NOT EXCEED THE GREATER OF (A) $100 USD OR (B) THE FEES PAID BY YOU IN THE PRIOR THREE MONTHS.</p>
+        </div>
+
+        <div id="termination">
+          <h2>Termination</h2>
+          <p>You may delete your account at any time from the app settings. Arrive reserves the right to suspend or terminate your access to the Platform immediately, without notice, for conduct that violates these Terms or is harmful to other users, the Platform, or third parties.</p>
+          <p>Upon termination, your right to use the Platform ceases immediately. Provisions that by their nature should survive termination (including payment obligations, intellectual property, and disclaimers) will remain in effect.</p>
+        </div>
+
+        <div id="contact-us">
+          <h2>Contact</h2>
+          <p>Questions about these Terms? Reach out:</p>
+          <ul>
+            <li>Email: <a href="mailto:legal@arrivepro.app" style="color:var(--violet);text-decoration:none;font-weight:500">legal@arrivepro.app</a></li>
+            <li>Support: <a href="./support.html" style="color:var(--violet);text-decoration:none;font-weight:500">Visit our Help Center</a></li>
+          </ul>
+        </div>
+
+      </article>
+    </div>
+  </div>
+
+  <footer class="py-10 relative" style="background:#EAE8E2;border-top:1px solid rgba(0,0,0,0.07)">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--amber) 20%,var(--violet) 50%,var(--teal) 80%,transparent 100%);opacity:0.5"></div>
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col md:flex-row items-center justify-between gap-6">
+      <a href="./index.html" class="flex items-center gap-2.5" style="text-decoration:none">
+        <img src="./Assets/site screens/logo.jpg" alt="Arrive" style="width:32px;height:32px;object-fit:cover;border-radius:8px;">
+        <span class="font-display text-lg font-semibold tracking-tight" style="color:var(--dark)">Arrive</span>
+      </a>
+      <div class="flex items-center gap-7 text-sm">
+        <a href="./privacy.html" class="nav-link" style="font-size:0.875rem">Privacy</a>
+        <a href="./terms.html" class="nav-link" style="font-size:0.875rem">Terms</a>
+        <a href="./support.html" class="nav-link" style="font-size:0.875rem">Support</a>
+        <a href="./contact.html" class="nav-link" style="font-size:0.875rem">Contact</a>
+      </div>
+      <p class="text-xs" style="color:#B0ADA7">© 2026 Arrive. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
