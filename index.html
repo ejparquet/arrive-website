@@ -34,6 +34,13 @@
       overflow-x: hidden;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     /* Grain overlay */
     body::after {
       content: '';
@@ -222,6 +229,55 @@
     }
     .feature-card:hover .feature-card-accent { opacity: 1; }
 
+    /* ─── Testimonial card ───────────────── */
+    .testimonial-card {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,0,0,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+      transition: transform 0.6s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+    .testimonial-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: linear-gradient(110deg,
+        transparent 20%,
+        rgba(255,255,255,0.55) 48%,
+        rgba(255,255,255,0.12) 52%,
+        transparent 80%
+      );
+      transform: translateX(-120%);
+      transition: transform 0s;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .testimonial-card:hover::after {
+      transform: translateX(140%);
+      transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+    }
+    .testimonial-card:hover {
+      box-shadow:
+        0 6px 16px rgba(0,0,0,0.08),
+        0 28px 52px rgba(0,0,0,0.11),
+        inset 0 1px 0 rgba(255,255,255,0.95);
+    }
+    .testimonial-card img {
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .testimonial-card:hover img {
+      transform: scale(1.1);
+    }
+
     /* ─── Divider line ───────────────────── */
     .divider {
       width: 44px; height: 2px;
@@ -247,6 +303,7 @@
 
     .btn-outline {
       position: relative;
+      background: #FFFFFF;
       border: 1.5px solid rgba(11,25,41,0.22);
       border-radius: 100px;
       color: var(--dark);
@@ -254,7 +311,7 @@
       transition: background 0.2s, border-color 0.2s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
     }
     .btn-outline:hover {
-      background: rgba(11,25,41,0.05);
+      background: #F5F4F1;
       border-color: rgba(11,25,41,0.38);
       transform: translateY(-2px);
     }
@@ -346,6 +403,32 @@
       background: rgba(255,255,255,0.2);
       border-color: rgba(255,255,255,0.32);
     }
+    ul.pro-list { list-style: none; padding: 0; margin: 0; }
+
+    /* Video pause button (WCAG 2.2.2) */
+    .video-pause-btn {
+      position: absolute;
+      bottom: 20px; right: 20px;
+      z-index: 12;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s, color 0.2s;
+    }
+    .video-pause-btn:hover  { background: rgba(255,255,255,0.2); color: #fff; }
+    .video-pause-btn:focus-visible {
+      outline: 2px solid rgba(255,255,255,0.8);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .section-video { display: none; }
+    }
 
     /* ─── Showcase phones container ──────── */
     .showcase-stage {
@@ -355,6 +438,39 @@
       gap: 18px;
       height: 600px;
       overflow: visible;
+    }
+
+    /* ─── Showcase phone fan positions ───── */
+    .sp-far-left   { transform: rotate(-7deg)   translateY(50px);  }
+    .sp-near-left  { transform: rotate(-3.5deg) translateY(20px);  }
+    .sp-center     { transform: rotate(0deg)    translateY(-16px); }
+    .sp-near-right { transform: rotate(3.5deg)  translateY(20px);  }
+    .sp-far-right  { transform: rotate(7deg)    translateY(50px);  }
+
+    .showcase-phone-wrap {
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+      cursor: pointer;
+      position: relative;
+    }
+    .showcase-phone-wrap:hover {
+      transform: rotate(0deg) translateY(-32px) scale(1.06);
+      z-index: 20;
+    }
+    .showcase-phone-wrap:hover .phone {
+      animation-play-state: paused;
+    }
+
+    /* ─── Showcase phone float animation ─── */
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-14px); }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .sf-1 { animation: phoneFloat 3.6s ease-in-out infinite 0.0s; }
+      .sf-2 { animation: phoneFloat 4.0s ease-in-out infinite 0.5s; }
+      .sf-3 { animation: phoneFloat 3.8s ease-in-out infinite 1.0s; }
+      .sf-4 { animation: phoneFloat 4.2s ease-in-out infinite 0.3s; }
+      .sf-5 { animation: phoneFloat 3.5s ease-in-out infinite 0.7s; }
     }
 
     /* ─── Section video backgrounds ────────── */
@@ -439,6 +555,9 @@
         drop-shadow(0 32px 56px rgba(220,122,40,0.18))
         drop-shadow(0 0 80px rgba(104,53,168,0.12));
     }
+
+    /* ─── Star rating ────────────────────── */
+    .star { color: var(--amber); }
   </style>
 </head>
 <body>
@@ -684,16 +803,23 @@
           </div>
         </div>
 
-        <!-- Phone -->
+        <!-- Phones -->
         <div class="flex justify-center lg:justify-end">
-          <div class="reveal relative phone-glow-amber">
-            <div class="phone fa" style="width:276px;height:572px;transform:rotate(3.5deg)">
+          <div class="reveal relative" style="width:380px;height:600px">
+            <!-- Back phone: appointments.png (left, rotated negative) -->
+            <div class="phone fa absolute" style="width:248px;height:512px;top:44px;left:0;transform:rotate(-4deg);opacity:0.82;z-index:1">
+              <div class="phone-screen">
+                <img src="./Assets/site screens/appointments.png" alt="Appointments">
+              </div>
+            </div>
+            <!-- Front phone: home.png (right, rotated positive) -->
+            <div class="phone fa phone-glow-amber absolute" style="width:276px;height:572px;top:0;right:0;transform:rotate(3.5deg);z-index:2">
               <div class="phone-screen">
                 <img src="./Assets/site screens/home.png" alt="Browse professionals">
               </div>
             </div>
             <!-- Floating nearby pill -->
-            <div class="absolute -left-16 bottom-24 float-card px-4 py-3.5 flex items-center gap-3" style="width:172px">
+            <div class="absolute float-card px-4 py-3.5 flex items-center gap-3" style="width:172px;bottom:32px;right:-8px;z-index:3">
               <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.07))">
                 <svg class="w-4 h-4" style="color:var(--green)" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
               </div>
@@ -862,10 +988,14 @@
        FOR PROS (dark)
   ════════════════════════════════════════ -->
   <section id="pros" class="dark-bg py-28 md:py-40 relative overflow-hidden text-white">
-    <video class="section-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-dark.png">
+    <video class="section-video" autoplay muted loop playsinline poster="./Assets/backgrounds/glow-dark.png" aria-hidden="true" id="pros-video">
       <source src="./Assets/backgrounds/dark-video.mp4" type="video/mp4">
     </video>
     <div class="light-video-overlay" style="background:rgba(11,25,41,0.78)"></div>
+    <button class="video-pause-btn" id="pros-video-toggle" aria-label="Pause background video" aria-pressed="false">
+      <svg id="pros-pause-icon" aria-hidden="true" focusable="false" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      <svg id="pros-play-icon"  aria-hidden="true" focusable="false" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+    </button>
     <!-- Ghost text -->
     <div class="pointer-events-none select-none absolute inset-0 flex items-center justify-center overflow-hidden" aria-hidden="true" style="z-index:2">
       <span class="font-display font-bold tracking-tighter" style="font-size:20vw;color:white;opacity:0.028">PROS</span>
@@ -882,57 +1012,57 @@
 
       <div class="grid lg:grid-cols-2 gap-20 xl:gap-28 items-center">
         <!-- Feature list -->
-        <div class="reveal space-y-3">
-          <div class="pro-row flex items-center gap-5 p-5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)">
-              <svg class="w-5 h-5" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <ul class="reveal space-y-3 pro-list" aria-label="Pro features">
+          <li class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)" aria-hidden="true">
+              <svg class="w-5 h-5" aria-hidden="true" focusable="false" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <div>
               <p class="font-semibold text-sm text-white mb-0.5">Boost Your Reach</p>
-              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Get discovered by new clients looking for your exact services.</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.72)">Get discovered by new clients looking for your exact services.</p>
             </div>
-          </div>
+          </li>
 
-          <div class="pro-row flex items-center gap-5 p-5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(104,53,168,0.22)">
-              <svg class="w-5 h-5" style="color:#A77DE0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          <li class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(104,53,168,0.22)" aria-hidden="true">
+              <svg class="w-5 h-5" aria-hidden="true" focusable="false" style="color:#A77DE0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
             </div>
             <div>
               <p class="font-semibold text-sm text-white mb-0.5">Social Media Marketing</p>
-              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Create and share custom posts and graphics with one tap.</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.72)">Create and share custom posts and graphics with one tap.</p>
             </div>
-          </div>
+          </li>
 
-          <div class="pro-row flex items-center gap-5 p-5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(26,157,184,0.16)">
-              <svg class="w-5 h-5" style="color:var(--teal)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <li class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(26,157,184,0.16)" aria-hidden="true">
+              <svg class="w-5 h-5" aria-hidden="true" focusable="false" style="color:var(--teal)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
             </div>
             <div>
               <p class="font-semibold text-sm text-white mb-0.5">Text &amp; Email Campaigns</p>
-              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Automate campaigns or send targeted one-time messages.</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.72)">Automate campaigns or send targeted one-time messages.</p>
             </div>
-          </div>
+          </li>
 
-          <div class="pro-row flex items-center gap-5 p-5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.14)">
-              <svg class="w-5 h-5" style="color:var(--green)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <li class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(34,197,94,0.14)" aria-hidden="true">
+              <svg class="w-5 h-5" aria-hidden="true" focusable="false" style="color:var(--green)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             </div>
             <div>
               <p class="font-semibold text-sm text-white mb-0.5">Import &amp; Invite Clients</p>
-              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Bring your existing client list onto Arrive with a single tap.</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.72)">Bring your existing client list onto Arrive with a single tap.</p>
             </div>
-          </div>
+          </li>
 
-          <div class="pro-row flex items-center gap-5 p-5">
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)">
-              <svg class="w-5 h-5" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <li class="pro-row flex items-center gap-5 p-5">
+            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.16)" aria-hidden="true">
+              <svg class="w-5 h-5" aria-hidden="true" focusable="false" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div>
               <p class="font-semibold text-sm text-white mb-0.5">Loyalty &amp; Referrals</p>
-              <p class="text-sm" style="color:rgba(255,255,255,0.5)">Reward your best clients and grow through word of mouth.</p>
+              <p class="text-sm" style="color:rgba(255,255,255,0.72)">Reward your best clients and grow through word of mouth.</p>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
 
         <!-- Phone -->
         <div class="reveal flex justify-center lg:justify-end">
@@ -943,13 +1073,13 @@
               </div>
             </div>
             <!-- Clients invited badge -->
-            <div class="absolute -left-14 bottom-20 dark-glass-card px-5 py-4 flex items-center gap-4">
+            <div class="absolute -left-14 bottom-20 dark-glass-card px-5 py-4 flex items-center gap-4" aria-label="1,737 clients invited">
               <div>
-                <p class="font-display text-2xl font-bold leading-none mb-1" style="color:var(--amber);font-variant-numeric:tabular-nums">1,737</p>
-                <p class="uppercase tracking-widest" style="font-size:9px;color:rgba(255,255,255,0.45)">Clients Invited</p>
+                <p class="font-display text-2xl font-bold leading-none mb-1" aria-hidden="true" style="color:var(--amber);font-variant-numeric:tabular-nums">1,737</p>
+                <p class="uppercase tracking-widest" aria-hidden="true" style="font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:0.12em">Clients Invited</p>
               </div>
-              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.2)">
-                <svg class="w-4 h-4" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(220,122,40,0.2)" aria-hidden="true">
+                <svg class="w-4 h-4" aria-hidden="true" focusable="false" style="color:var(--amber)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
               </div>
             </div>
           </div>
@@ -979,29 +1109,104 @@
 
       <!-- Phones fan -->
       <div class="showcase-stage">
-        <div class="reveal d3 flex-shrink-0" style="transform:rotate(-7deg) translateY(50px)">
-          <div class="phone" style="width:192px;height:400px">
+        <div class="reveal d3 flex-shrink-0 showcase-phone-wrap sp-far-left">
+          <div class="phone sf-1" style="width:192px;height:400px">
             <div class="phone-screen"><img src="./Assets/site screens/appointments.png" alt="Appointments"></div>
           </div>
         </div>
-        <div class="reveal d2 flex-shrink-0" style="transform:rotate(-3.5deg) translateY(20px)">
-          <div class="phone" style="width:224px;height:468px">
+        <div class="reveal d2 flex-shrink-0 showcase-phone-wrap sp-near-left">
+          <div class="phone sf-2" style="width:224px;height:468px">
             <div class="phone-screen"><img src="./Assets/site screens/home.png" alt="Home"></div>
           </div>
         </div>
-        <div class="reveal d1 flex-shrink-0 z-10 center-phone-glow" style="transform:rotate(0deg) translateY(-16px)">
-          <div class="phone" style="width:256px;height:532px">
+        <div class="reveal d1 flex-shrink-0 z-10 center-phone-glow showcase-phone-wrap sp-center">
+          <div class="phone sf-3" style="width:256px;height:532px">
             <div class="phone-screen"><img src="./Assets/site screens/pro page.png" alt="Pro profile"></div>
           </div>
         </div>
-        <div class="reveal d2 flex-shrink-0" style="transform:rotate(3.5deg) translateY(20px)">
-          <div class="phone" style="width:224px;height:468px">
+        <div class="reveal d2 flex-shrink-0 showcase-phone-wrap sp-near-right">
+          <div class="phone sf-4" style="width:224px;height:468px">
             <div class="phone-screen"><img src="./Assets/site screens/marketing.png" alt="Marketing"></div>
           </div>
         </div>
-        <div class="reveal d3 flex-shrink-0" style="transform:rotate(7deg) translateY(50px)">
-          <div class="phone" style="width:192px;height:400px">
+        <div class="reveal d3 flex-shrink-0 showcase-phone-wrap sp-far-right">
+          <div class="phone sf-5" style="width:192px;height:400px">
             <div class="phone-screen"><img src="./Assets/site screens/client history.png" alt="Client history"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════
+       TESTIMONIALS
+  ════════════════════════════════════════ -->
+  <section class="py-24 md:py-32 relative overflow-hidden" style="background:#F4F2EE;border-top:1px solid rgba(0,0,0,0.06)">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+      <div class="text-center mb-14">
+        <div class="reveal divider mx-auto mb-7"></div>
+        <h2 class="reveal font-display font-bold tracking-tight leading-tight mb-4" style="font-size:clamp(2.6rem,5vw,3.8rem);color:var(--dark)">Loved by clients &amp; pros.</h2>
+        <p class="reveal d1 text-base max-w-xs mx-auto leading-relaxed" style="color:var(--muted)">
+          Real people. Real results.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Review 1 -->
+        <div class="reveal testimonial-card p-8">
+          <div class="flex items-center gap-1 mb-5">
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm leading-relaxed mb-6" style="color:var(--muted)">"Arrive completely changed how I manage my appointments. I used to rely on DMs and text messages — now everything is in one place and my clients actually show up."</p>
+          <div class="flex items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Jordan T." class="w-9 h-9 rounded-full flex-shrink-0 object-cover" style="border:1.5px solid rgba(220,122,40,0.2)">
+            <div>
+              <p class="text-xs font-semibold" style="color:var(--dark)">Jordan T.</p>
+              <p style="font-size:10px;color:var(--muted);margin-top:1px">Barber · Atlanta, GA</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="reveal d1 testimonial-card p-8">
+          <div class="flex items-center gap-1 mb-5">
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm leading-relaxed mb-6" style="color:var(--muted)">"I found my nail tech through Arrive and she's incredible. The booking took under two minutes, and I got a reminder the day before. It just works — no friction at all."</p>
+          <div class="flex items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/women/39.jpg" alt="Aaliyah M." class="w-9 h-9 rounded-full flex-shrink-0 object-cover" style="border:1.5px solid rgba(104,53,168,0.2)">
+            <div>
+              <p class="text-xs font-semibold" style="color:var(--dark)">Aaliyah M.</p>
+              <p style="font-size:10px;color:var(--muted);margin-top:1px">Client · Houston, TX</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="reveal d2 testimonial-card p-8">
+          <div class="flex items-center gap-1 mb-5">
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-3.5 h-3.5 star" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm leading-relaxed mb-6" style="color:var(--muted)">"The marketing tools are a game changer. I sent a loyalty campaign to 200 clients last month and had 40 bookings within 48 hours. Nothing else I've tried comes close."</p>
+          <div class="flex items-center gap-3">
+            <img src="https://randomuser.me/api/portraits/women/60.jpg" alt="Kezia R." class="w-9 h-9 rounded-full flex-shrink-0 object-cover" style="border:1.5px solid rgba(26,157,184,0.2)">
+            <div>
+              <p class="text-xs font-semibold" style="color:var(--dark)">Kezia R.</p>
+              <p style="font-size:10px;color:var(--muted);margin-top:1px">Hair Stylist · Chicago, IL</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1023,7 +1228,7 @@
     <div class="absolute pointer-events-none" style="width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(220,122,40,0.12) 0%,transparent 65%);filter:blur(60px);z-index:2"></div>
     <div class="absolute pointer-events-none" style="width:300px;height:300px;top:20%;left:10%;background:radial-gradient(circle,rgba(104,53,168,0.1) 0%,transparent 70%);filter:blur(50px);z-index:2"></div>
     <div class="absolute pointer-events-none" style="width:280px;height:280px;bottom:15%;right:8%;background:radial-gradient(circle,rgba(26,157,184,0.08) 0%,transparent 70%);filter:blur(50px);z-index:2"></div>
-    <!-- Decorative ring -->
+    <!-- Decorative rings -->
     <div class="absolute pointer-events-none" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,0.04);border-radius:50%;z-index:2"></div>
     <div class="absolute pointer-events-none" style="width:820px;height:820px;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,0.025);border-radius:50%;z-index:2"></div>
 
@@ -1088,6 +1293,37 @@
     requestAnimationFrame(() => {
       document.querySelectorAll('.reveal').forEach(el => {
         if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+      });
+    });
+
+    // Video pause toggle (WCAG 2.2.2)
+    const prosVideo  = document.getElementById('pros-video');
+    const prosToggle = document.getElementById('pros-video-toggle');
+    const pauseIcon  = document.getElementById('pros-pause-icon');
+    const playIcon   = document.getElementById('pros-play-icon');
+    if (prosToggle && prosVideo) {
+      prosToggle.addEventListener('click', () => {
+        const paused = !prosVideo.paused;
+        paused ? prosVideo.pause() : prosVideo.play();
+        prosToggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        prosToggle.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+        pauseIcon.style.display = paused ? 'none'  : '';
+        playIcon.style.display  = paused ? ''      : 'none';
+      });
+    }
+
+    // Testimonial card 3D tilt
+    document.querySelectorAll('.testimonial-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transition = 'box-shadow 0.4s ease';
+        card.style.transform = `perspective(900px) rotateX(${-y * 9}deg) rotateY(${x * 9}deg) translateY(-6px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.6s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease';
+        card.style.transform = '';
       });
     });
 
